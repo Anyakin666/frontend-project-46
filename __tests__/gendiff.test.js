@@ -1,12 +1,9 @@
 import { test, expect, describe } from '@jest/globals';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import genDiff from '../src/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
+// Простая функция для получения пути к фикстуре
+const getFixturePath = (filename) => path.join('__tests__', '__fixtures__', filename);
 
 describe('gendiff', () => {
   test('should compare two flat JSON files correctly', () => {
