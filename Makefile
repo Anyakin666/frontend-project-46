@@ -4,20 +4,20 @@ install:
 	npm install
 
 test:
-	npx jest
+	npm test
 
 lint:
-	npx eslint .
+	npm run lint
 
 test-coverage:
-	npx jest --coverage
+	npm run test-coverage
 
 check: lint test
 
 help:
-	@echo "Available commands:"
-	@echo "  make install       - install dependencies"
-	@echo "  make test          - run tests (npx jest)"
-	@echo "  make lint          - run linter (npx eslint .)"
-	@echo "  make test-coverage - run tests with coverage"
-	@echo "  make check         - run linter and tests"
+	@echo "Доступные команды:"
+	@echo "  make install       - установить зависимости"
+	@echo "  make test          - запустить тесты"
+	@echo "  make lint          - запустить линтер"
+	@echo "  make test-coverage - запустить тесты с покрытием"
+	@echo "  make check         - запустить линтер и тесты"
