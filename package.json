@@ -6,7 +6,6 @@
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
-  "type": "module",
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
