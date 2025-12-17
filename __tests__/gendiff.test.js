@@ -1,10 +1,10 @@
 const { join } = require('path');
-const { readFileSync } = require('fs');
 const genDiff = require('../src/index.js');
 
 const getFixturePath = (filename) => join(__dirname, '__fixtures__', filename);
 
 describe('gendiff', () => {
+  // Ожидаемый результат из файла
   const expected = `{
   - follow: false
     host: hexlet.io

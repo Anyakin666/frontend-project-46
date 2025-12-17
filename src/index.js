@@ -4,8 +4,8 @@ const buildDiff = (obj1, obj2) => {
   const keys = [...new Set([...Object.keys(obj1), ...Object.keys(obj2)])].sort();
   
   return keys.flatMap((key) => {
-    const has1 = obj1.hasOwnProperty(key);
-    const has2 = obj2.hasOwnProperty(key);
+    const has1 = Object.prototype.hasOwnProperty.call(obj1, key);
+    const has2 = Object.prototype.hasOwnProperty.call(obj2, key);
     
     if (!has2) {
       return `  - ${key}: ${obj1[key]}`;
