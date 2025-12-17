@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-export function readFile(filepath) {
+function readFile(filepath) {
   const absolutePath = path.resolve(process.cwd(), filepath);
   const content = fs.readFileSync(absolutePath, 'utf-8');
   const extension = path.extname(filepath).toLowerCase();
@@ -12,3 +12,5 @@ export function readFile(filepath) {
   
   return JSON.parse(content);
 }
+
+module.exports = { readFile };

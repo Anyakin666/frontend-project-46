@@ -1,15 +1,30 @@
-import js from '@eslint/js';
-import globals from 'globals';
+const { defineConfig } = require("eslint/config");
+const js = require("@eslint/js");
 
-export default [
-  { ignores: ['node_modules/', 'coverage/', '__tests__/__fixtures__/', '**/*.json'] },
+module.exports = defineConfig([
   {
-    files: ['**/*.js'],
+    ignores: ["node_modules/", "coverage/", "__tests__/__fixtures__/", "**/*.json"],
+  },
+  {
+    files: ["**/*.js"],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: { ...globals.node, ...globals.jest }
+      ecmaVersion: "latest",
+      sourceType: "commonjs",
+      globals: {
+        ...require("globals").node,  // Глобальные переменные Node.js
+      },
     },
-    rules: js.configs.recommended.rules
-  }
-];
+    rules: {
+      ...js.configs.recommended.rules,
+      "no-console": "off",
+    },
+  },
+  {
+    files: ["__tests__/**/*.js"],  // Отдельная конфигурация для тестов
+    languageOptions: {
+      globals: {
+        ...require("globals").jest,  // Добавляем глобальные переменные Jest
+      },
+    },
+  },
+]);

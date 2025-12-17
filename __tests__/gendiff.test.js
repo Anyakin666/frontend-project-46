@@ -1,9 +1,7 @@
-import { test, expect, describe } from '@jest/globals';
-import path from 'path';
-import genDiff from '../src/index.js';
+const path = require('path');
+const genDiff = require('../src/index.js');
 
-// Простая функция для получения пути к фикстуре
-const getFixturePath = (filename) => path.join('__tests__', '__fixtures__', filename);
+const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 
 describe('gendiff', () => {
   test('should compare two flat JSON files correctly', () => {
