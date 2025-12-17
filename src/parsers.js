@@ -1,16 +1,26 @@
-const fs = require('fs');
-const path = require('path');
+const { readFileSync } = require('fs');
+const { extname } = require('path');
+const yaml = require('js-yaml');
 
-function readFile(filepath) {
-  const absolutePath = path.resolve(process.cwd(), filepath);
-  const content = fs.readFileSync(absolutePath, 'utf-8');
-  const extension = path.extname(filepath).toLowerCase();
+const parseJSON = (content) => JSON.parse(content);
+const parseYAML = (content) => yaml.load(content);
+
+const parsers = {
+  '.json': parseJSON,
+  '.yml': parseYAML,
+  '.yaml': parseYAML,
+};
+
+const parseFile = (filepath) => {
+  const content = readFileSync(filepath, 'utf-8');
+  const extension = extname(filepath).toLowerCase();
+  const parse = parsers[extension];
   
-  if (extension !== '.json') {
-    throw new Error(`Unsupported file format: ${extension}. Only .json is supported`);
+  if (!parse) {
+    throw new Error(`Unsupported file format: ${extension}. Supported: .json, .yml, .yaml`);
   }
   
-  return JSON.parse(content);
-}
+  return parse(content);
+};
 
-module.exports = { readFile };
+module.exports = parseFile;

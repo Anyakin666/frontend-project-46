@@ -1,41 +1,41 @@
-const { readFile } = require('./parsers.js');
-const _ = require('lodash');
+const parseFile = require('./parsers.js');
 
-function formatValue(value) {
-  if (_.isBoolean(value)) return value.toString();
-  if (_.isNull(value)) return 'null';
-  if (_.isNumber(value)) return value.toString();
-  if (_.isObject(value) && !_.isArray(value)) return '[complex value]';
-  return value;
-}
-
-function buildDiff(obj1, obj2) {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const allKeys = _.sortBy(_.union(keys1, keys2));
+const buildDiff = (obj1, obj2) => {
+  const keys = [...new Set([...Object.keys(obj1), ...Object.keys(obj2)])].sort();
   
-  return allKeys.map((key) => {
-    const hasKey1 = _.has(obj1, key);
-    const hasKey2 = _.has(obj2, key);
-    const value1 = obj1[key];
-    const value2 = obj2[key];
+  return keys.flatMap((key) => {
+    const has1 = obj1.hasOwnProperty(key);
+    const has2 = obj2.hasOwnProperty(key);
     
-    if (!hasKey1) return `  + ${key}: ${formatValue(value2)}`;
-    if (!hasKey2) return `  - ${key}: ${formatValue(value1)}`;
-    if (_.isEqual(value1, value2)) return `    ${key}: ${formatValue(value1)}`;
-    return `  - ${key}: ${formatValue(value1)}\n  + ${key}: ${formatValue(value2)}`;
+    if (!has2) {
+      return `  - ${key}: ${obj1[key]}`;
+    }
+    
+    if (!has1) {
+      return `  + ${key}: ${obj2[key]}`;
+    }
+    
+    if (obj1[key] !== obj2[key]) {
+      return [`  - ${key}: ${obj1[key]}`, `  + ${key}: ${obj2[key]}`];
+    }
+    
+    return `    ${key}: ${obj1[key]}`;
   });
-}
+};
 
-function genDiff(filepath1, filepath2, format = 'stylish') {
-  const data1 = readFile(filepath1);
-  const data2 = readFile(filepath2);
+const formatDiff = (diffLines) => `{\n${diffLines.join('\n')}\n}`;
+
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
+  const data1 = parseFile(filepath1);
+  const data2 = parseFile(filepath2);
+  
   const diffLines = buildDiff(data1, data2);
   
   if (format === 'stylish') {
-    return `{\n${diffLines.join('\n')}\n}`;
+    return formatDiff(diffLines);
   }
-  return JSON.stringify({ data1, data2 }, null, 2);
-}
+  
+  return formatDiff(diffLines);
+};
 
 module.exports = genDiff;
